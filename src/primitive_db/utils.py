@@ -1,4 +1,5 @@
 import json
+import os
 
 
 def load_metadata(filepath):
@@ -23,6 +24,8 @@ def load_table_data(table_name):
 
 
 def save_table_data(table_name, data):
+    os.makedirs("data", exist_ok=True)
+
     with open(f"data/{table_name}.json", "w") as file:
         json.dump(data, file)
 
