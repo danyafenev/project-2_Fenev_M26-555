@@ -21,3 +21,7 @@ users
 Введите команду: list_tables
 Введите команду: exit
 ```
+
+## Демонстрация работы
+
+[![Демонстрация работы базы данных](https://asciinema.org/a/dqwx2hh55oExHdrh.svg)](https://asciinema.org/a/dqwx2hh55oExHdrh)
