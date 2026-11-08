@@ -51,7 +51,7 @@ users
 
 ## Демонстрация работы
 
-[![Демонстрация работы базы данных](https://asciinema.org/a/MHtOPXKdjWPEEQgl.svg)](https://asciinema.org/a/MHtOPXKdjWPEEQgl)
+[![Демонстрация работы базы данных](https://asciinema.org/a/wFVZTngoo7sI71xt.svg)](https://asciinema.org/a/wFVZTngoo7sI71xt)
 
 
 ## Работа с данными
