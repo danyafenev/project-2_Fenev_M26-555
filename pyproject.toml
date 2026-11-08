@@ -1,0 +1,19 @@
+[project]
+name = "primitive_db"
+version = "0.1.0"
+description = "Primitive database CLI application"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.scripts]
+project = "primitive_db.main:main"
+database = "primitive_db.main:main"
+
+[build-system]
+requires = ["uv_build>=0.9.0,<0.10.0"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "primitive_db"
+module-root = "src"
