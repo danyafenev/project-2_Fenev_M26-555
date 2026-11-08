@@ -3,6 +3,7 @@ import shlex
 import prompt
 from prettytable import PrettyTable
 
+from primitive_db.constants import META_FILE
 from primitive_db.core import (
     create_table,
     delete,
@@ -12,9 +13,9 @@ from primitive_db.core import (
     select,
     update,
 )
+from primitive_db.decorators import create_cacher
 from primitive_db.parser import parse_values, parse_where
 from primitive_db.utils import (
-    create_cacher,
     load_metadata,
     load_table_data,
     save_metadata,
@@ -22,30 +23,23 @@ from primitive_db.utils import (
 
 
 def welcome():
+    
+    """Выводит приветствие при запуске программы."""
+    
     print("Первая попытка запустить проект!")
     print()
     print("***")
     print("<command> exit - выйти из программы")
     print("<command> help - справочная информация")
 
-    while True:
-        command = prompt.string("Введите команду: ")
-
-        if command == "help":
-            print("<command> exit - выйти из программы")
-            print("<command> help - справочная информация")
-        elif command == "exit":
-            break
-        else:
-            print(f"Функции {command} нет. Попробуйте снова.")
-
 
 def run():
     
+    welcome()
     cache_result, clear_cache = create_cacher()
     while True:
-        metadata = load_metadata("db_meta.json")
-        user_input = prompt.string("Введите команду: ")
+        metadata = load_metadata(META_FILE)
+        user_input = prompt.string("Введите команду: ").strip()
         try:
             args = shlex.split(user_input)
         except ValueError:
@@ -90,7 +84,7 @@ def run():
             table_name = args[1]
             columns = args[2:]
             metadata = create_table(metadata, table_name, columns)
-            save_metadata("db_meta.json", metadata)
+            save_metadata(META_FILE, metadata)
             clear_cache()
 
         elif command == "drop_table":
@@ -98,7 +92,7 @@ def run():
             result = drop_table(metadata, table_name)
 
             if result is not None:
-                save_metadata("db_meta.json", result)
+                save_metadata(META_FILE, result)
                 clear_cache()
 
         elif command == "list_tables":

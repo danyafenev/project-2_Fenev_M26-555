@@ -1,4 +1,7 @@
 def parse_values(text):
+    
+    """Преобразует строку в список значений."""
+    
     values = []
 
     for value in text.split(","):
@@ -16,6 +19,9 @@ def parse_values(text):
     return values
 
 def parse_where(text):
+    
+    """Разбирает условие со столбцом и значением."""
+    
     column, value = text.split("=", 1)
     column = column.strip()
     value = parse_values(value)[0]

@@ -1,17 +1,21 @@
 import os
 
+from primitive_db.constants import VALID_TYPES
 from primitive_db.decorators import confirm_action, handle_db_errors, log_time
 from primitive_db.utils import load_table_data, save_table_data
 
 
 def create_table(metadata, table_name, columns):
+    
+    """Создаёт новую таблицу."""
+    
     if table_name in metadata:
         print(f"Таблица {table_name} уже существует.")
         return metadata
 
     for column in columns:
         name, data_type = column.split(":")
-        if data_type not in ("int", "str", "bool"):
+        if data_type not in VALID_TYPES:
             print(f"Некорректное значение: {data_type}. Попробуйте снова.")
             return metadata
 
@@ -20,6 +24,9 @@ def create_table(metadata, table_name, columns):
 
 @confirm_action("удаление таблицы")
 def drop_table(metadata, table_name):
+    
+    """Удаляет таблицу и её данные."""
+    
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return metadata
@@ -35,6 +42,9 @@ def drop_table(metadata, table_name):
 @handle_db_errors
 @log_time
 def insert(metadata, table_name, values):
+    
+    """Добавляет новую запись в таблицу."""
+    
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return
@@ -75,6 +85,9 @@ def insert(metadata, table_name, values):
 @handle_db_errors
 @log_time
 def select(table_data, where_clause=None):
+    
+    """Возвращает записи таблицы с учётом условия выборки."""
+    
     if where_clause is None:
         return table_data
 
@@ -90,6 +103,9 @@ def select(table_data, where_clause=None):
 
 @handle_db_errors
 def update(metadata, table_name, set_clause, where_clause):
+    
+    """Обновляет записи таблицы по условию."""
+    
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return
@@ -127,6 +143,9 @@ def update(metadata, table_name, set_clause, where_clause):
 @handle_db_errors
 @confirm_action("удаление записей")
 def delete(metadata, table_name, where_clause):
+    
+    """Удаляет записи таблицы по условию."""
+    
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return
@@ -141,6 +160,9 @@ def delete(metadata, table_name, where_clause):
 
 
 def info(metadata, table_name):
+    
+    """Выводит информацию о столбцах таблицы."""
+    
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return
