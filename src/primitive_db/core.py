@@ -1,3 +1,5 @@
+import os
+
 from primitive_db.decorators import confirm_action, handle_db_errors, log_time
 from primitive_db.utils import load_table_data, save_table_data
 
@@ -23,6 +25,11 @@ def drop_table(metadata, table_name):
         return metadata
 
     del metadata[table_name]
+
+    filepath = f"data/{table_name}.json"
+    if os.path.exists(filepath):
+        os.remove(filepath)
+
     return metadata
 
 @handle_db_errors
