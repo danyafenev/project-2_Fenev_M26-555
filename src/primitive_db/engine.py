@@ -46,19 +46,45 @@ def run():
     while True:
         metadata = load_metadata("db_meta.json")
         user_input = prompt.string("Введите команду: ")
-        args = shlex.split(user_input)
+        try:
+            args = shlex.split(user_input)
+        except ValueError:
+            print("Ошибка ввода команды.")
+            continue
+
+        if not args:
+            continue
 
         command = args[0]
+        
+        required_args = {
+            "create_table": 3,
+            "drop_table": 2,
+            "insert": 4,
+            "select": 3,
+            "update": 6,
+            "delete": 5,
+            "info": 2,
+        }
+
+        if command in required_args and len(args) < required_args[command]:
+            print("Недостаточно аргументов команды.")
+            continue
 
         if command == "exit":
             break
 
         elif command == "help":
             print("create_table <имя> <столбец:тип> ...")
-            print("list_tables")
             print("drop_table <имя>")
-            print("exit")
+            print("list_tables")
+            print("info <имя>")
+            print('insert into <таблица> values ("имя", 28, true)')
+            print("select from <таблица> [where столбец = значение]")
+            print("update <таблица> set столбец = значение where столбец = значение")
+            print("delete from <таблица> where столбец = значение")
             print("help")
+            print("exit")
 
         elif command == "create_table":
             table_name = args[1]
@@ -69,9 +95,11 @@ def run():
 
         elif command == "drop_table":
             table_name = args[1]
-            metadata = drop_table(metadata, table_name)
-            save_metadata("db_meta.json", metadata)
-            clear_cache()
+            result = drop_table(metadata, table_name)
+
+            if result is not None:
+                save_metadata("db_meta.json", result)
+                clear_cache()
 
         elif command == "list_tables":
             for table_name in metadata:

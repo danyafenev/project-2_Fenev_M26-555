@@ -80,15 +80,34 @@ def select(table_data, where_clause=None):
 
     return result
 
+
 @handle_db_errors
 def update(metadata, table_name, set_clause, where_clause):
     if table_name not in metadata:
         print(f"Таблица {table_name} не существует.")
         return
 
-    data = load_table_data(table_name)
     column, value = set_clause
     where_column, where_value = where_clause
+
+    columns = {
+        name: data_type
+        for name, data_type in (
+            item.split(":") for item in metadata[table_name]
+        )
+    }
+
+    if column not in columns or where_column not in columns:
+        print("Указанный столбец не существует.")
+        return
+
+    data_type = columns[column]
+
+    if type(value).__name__ != data_type:
+        print(f"Некорректный тип значения для столбца {column}.")
+        return
+
+    data = load_table_data(table_name)
 
     for row in data:
         if row[where_column] == where_value:
@@ -96,6 +115,7 @@ def update(metadata, table_name, set_clause, where_clause):
 
     save_table_data(table_name, data)
     return data
+
 
 @handle_db_errors
 @confirm_action("удаление записей")
